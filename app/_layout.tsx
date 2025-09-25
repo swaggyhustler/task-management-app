@@ -10,6 +10,7 @@ export default function RootLayout() {
         <Stack.Screen name="index" options={{title: "Dashboard", headerShadowVisible: false}}/>
         <Stack.Screen name="TaskList" options={{title: "Task List", headerShadowVisible: false}}/>
         <Stack.Screen name="AddTask" options={{title: "Add Task", headerShadowVisible: false}}/>
+        <Stack.Screen name="[id]" options={{title: "Edit Task", headerShadowVisible: false}}/>
       </Stack>
     </Provider>
   </SafeAreaProvider>;

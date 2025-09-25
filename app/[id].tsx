@@ -1,6 +1,6 @@
 import { RootState } from "@/redux/store";
-import { addTodo } from "@/redux/todoSlice";
-import { useRouter } from "expo-router";
+import { editTodo } from "@/redux/todoSlice";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useFormik } from "formik";
 import {
     StyleSheet,
@@ -16,17 +16,12 @@ import * as Yup from "yup";
 const Status = ["InProgress", "OnHold", "Completed", "InReview"];
 const Priority = ["High", "Medium", "Low"];
 
-const AddTask = () => {
+const EditTodo = () => {
+    const { id } = useLocalSearchParams();
   const router = useRouter();
   const dispatch = useDispatch();
   const todo = useSelector((state: RootState) => state.todo);
-
-  const getFormatedDate = () => {
-    const date = new Date();
-    return `${date.getDate().toString()}/${date.getMonth().toString()}/${date
-      .getFullYear()
-      .toString()}`;
-  };
+  const targetTodo = todo.find((todo)=>todo.id.toString()===id)
 
   const validationSchema = Yup.object().shape({
     status: Yup.string()
@@ -42,16 +37,18 @@ const AddTask = () => {
 
   const formik = useFormik({
     initialValues: {
-      title: "",
-      status: "",
-      priority: "",
-      date: getFormatedDate(),
+      title: targetTodo?.title,
+      status: targetTodo?.status,
+      priority: targetTodo?.priority,
+      date: targetTodo?.date, 
+      completed: targetTodo?.completed,
+      id: id,
     },
     validationSchema,
     onSubmit: (values) => {
-      console.log(values);
-      dispatch(addTodo({ ...values, id: todo.length + 1 }));
-      router.push("/TaskList");
+    dispatch(editTodo(values));
+    router.push('/TaskList');
+    console.log(values);
     },
   });
 
@@ -67,7 +64,6 @@ const AddTask = () => {
             style={styles.textInput}
             value={formik.values.title}
             onChangeText={formik.handleChange("title")}
-            placeholder="Enter title here"
           />
         </View>
 
@@ -200,4 +196,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddTask;
+export default EditTodo;

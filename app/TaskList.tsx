@@ -1,10 +1,10 @@
-import {View, Text, ScrollView, StyleSheet, TouchableOpacity} from 'react-native'
+import {View, Text, ScrollView, StyleSheet, TouchableOpacity, Pressable} from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Fontisto from '@expo/vector-icons/Fontisto';
 import {data} from '@/constants/data'
 import {Entypo} from "@expo/vector-icons";
 import { useEffect, useState } from 'react';
-import { Link, RelativePathString } from 'expo-router';
+import { Link, RelativePathString, useRouter } from 'expo-router';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 
@@ -14,6 +14,8 @@ type TaskItemProps = {
 
 const TaskItem: React.FC<TaskItemProps> = ({taskItem}) => {
 
+    const router = useRouter();
+    
     const bgColor = {
         backgroundColor: ""
     }
@@ -29,7 +31,7 @@ const TaskItem: React.FC<TaskItemProps> = ({taskItem}) => {
     return <View style={{padding: 15, gap: 15, borderWidth: 2, borderColor: 'grey', borderRadius: 20, marginHorizontal: 20, marginVertical: 10, backgroundColor: taskItem.status==='Completed'?'#99d98c':''}}>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <Text style={{fontWeight: 'bold', fontSize: 18}}>{taskItem.title}</Text>
-            <Entypo name="dots-three-horizontal" size={18} color="black" />
+            <Pressable onPress={()=>router.push(`/${taskItem.id}`)}><Entypo name="dots-three-horizontal" size={18} color="black" /></Pressable>
         </View>
         <View style={{flexDirection: 'row', gap: 10}}>
             <Text style={{borderWidth: 1, borderRadius: 20, paddingHorizontal: 8, paddingVertical: 5, fontSize: 12, fontWeight: 'bold', ...bgColor}}>{taskItem.priority}</Text>
